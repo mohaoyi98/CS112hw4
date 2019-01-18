@@ -1,0 +1,104 @@
+Problem 1.
+
+1. Best: O(n); Average: O(n); Worst: O(n)
+In all of these cases, the time efficiency of comparison is O(n), because in order to find the largest element, all of them have to traverse the whole array and compare every element with the temporary largest element.
+In the best case, the first element in the array is the largest. Thus, the time efficiency of assignment is O(1), since the algorithm only needs to initialize the temporary largest element.
+In the worst case, the array is strictly sorted and the algorithm has to update the largest element in every iteration. Thus, the time efficiency of assignment is O(n).
+Adding up the time efficiency function of comparison and assignment, we get that the overall time efficiency is O(n) for both the best case and the worst case. Since the time efficiency of the average case is in between, it must also be O(n).
+
+2. Best: O(nlogn); Average: O(nlogn); Worst: O(nlogn)
+First, since what the algorithm does after sorting the array is just one step of assignment, to determine its time efficency, we only need to focus on the sorting part.
+Next, note that no matter the case is the best, the average, or the worst, we will have roughly log2(n) recursive cases. 
+For each recursive case, the time efficiency of comparison and assignment will be O(n).
+Therefore, in general, the time efficiency of the algorithm will be O(nlogn), regardless whether the case is the best, the average, or the worst.
+
+3. In general, algorithm A is faster, since for large n, O(n) is far smaller than O(nlogn), and it also grows slower than O(nlogn). 
+(Note that for small n, O(n) can be greater than O(nlogn). However, what determines whether an algorithm is good or not is its performance in "big" cases).
+
+
+Problem 2.
+
+1. {3, 24, 13, 27, 34, 2, 50, 12}
+
+2. {3, 13, 24, 27, 2, 34, 50, 12}
+
+3. {3, 13, 24, 27, 34, 2, 50, 12}; or, in general, after the completion of the recursive call specified in the question, the first half of the array would be sorted, while the remaining half would be unchanged.
+
+
+Problem 3.
+
+1. 
+expression         address       value
+------------------ ------------- -----------
+x                  0x128         0x840     
+x.ch               0x840         'h'     
+y.prev             0x326         0x400     
+y.next.prev        0x666         0x320     
+y.prev.next        0x402         0x320     
+y.prev.next.next   0x322         0x660
+
+2. 
+x.next = y.prev.next;
+y.prev.next = x;
+x.prev = y.prev;
+y.prev = x;
+
+3. 
+public static DNode initNexts(DNode last) {
+	DNode trav = last;
+	trav.next = null;
+	while (trav.prev != null) {
+		trav.prev.next = trav;
+		trav = trav.prev;
+	}
+	return trav;
+}
+
+
+Problem 4.
+
+1. 
+Method analyses: Since I need to constantly update and see the records of my products, the the performance of the method getItem() would be important. However, I do not often need to add/remove my products to sell, so addItem() and removeItem() would be less important.
+
+Time efficiency: Since getItem() will be the method most frequently used, its time efficiency can decide the overall time efficiency of my choice. For ArrayList, the time efficiency of its getItem() is O(1) since it provides random access, while for LLList, on average, the time efficiency of getItem() is O(n) since it has to walk down the list. Therefore, as for time efficiency, ArrayList performs better than LLList.
+
+Space efficiency: The space efficiency of getItem() of both data types is O(1), since the space used is a constant in each case. The space efficiency of Arraylist and LLList is O(m) and O(n), respectively, where m is the theoretical maximum length. Since here, the number of products is almost a constant, m would be close to n and the space used to store the list is almost equal for each case.
+
+Conclusion: As for time efficiency, ArrayList is better than LLList; while as for space efficiency, ArrayList is almost as good as LLList. Therefore, in general, I would prefer to use ArrayList.
+
+2.
+Method analyses: Since I need to add tweets to the list constantly, addItem() would be important. Also, I need to print the tweets, so I need the toString() method in addition. Since I start with an empty list in each week, removeItem() will not be used.
+
+Space efficiency: The overall space efficiency for addItem() of both ArrayList and LLList is O(1), since the space they use is a constant w.r.t the length of the list. However, if the ArrayList is full (the worst case), then I have to create a new longer ArrayList and copy every tweet from the old list to it. In this case, the space efficiency for addItem would be O(m). The space efficiency for toString() is always O(n) for both ArrayList and LLList, where n is the number of tweets, since in either case, toString() needs to create a String object whose length is proportional to the number of tweets. However, since the length of the list is hard to predict, if I use an ArrayList, its m should be far larger than n for an LLList. Therefore, as for space, an LLList is more efficient than an ArrayList.
+ 
+Time efficiency: The best case for ArrayList is that I add (if I can) the latest tweet to the end of the list, where the time efficiency for addItem() is O(1) since it provides random access and there is no need to shift elements. However, this best case is not always applicable, since when the Arraylist is full, I have to traverse the old list and copy every item to the new list I created, which changes its time efficiency into O(m). The best case for LLList is that I add the latest tweet to the beginning of the list, where the time efficiency for addItem() is also O(1) since it does not need to traverse the list. This best case is always applicable, since there is no restrict on where I can add a new element to a LLList. (Note that we only need to focus on the best case here since for printing the events in reverse chronological order, these best cases are enough.) The time efficiency of toString() is always O(n) for both ArrayList and LLList, since it always has to build up the output string by traversing the whole list, and what is different is just the order of traversal. Therefore, as for time, an LLList is more efficient than an ArrayList (due to the bad case of addItem() when an ArrayList is full).
+
+Conclusion: As for both time and space efficiency, an LLList is better than an ArrayList. Therefore, I would choose to use LLList for this application.
+
+3. 
+Method analyses: The number of events is fairly consistent, so the value m is predictable for an ArrayList. During each month, we have to add new events to the list w.r.t the calendar. Sometimes an event can be canceled, and then, we need to remove it from the list. Therefore, the efficiency of removeItem() and addItem() matters. Also, we need to display the events, so the efficiency of toString() matters, too.
+
+Space efficiency: Since the number of events if fairly consistent, m for an ArrayList would be close to n for an LLList at the end of a month, and the space used to store the list is almost equal for each case per month. The space efficiency for removeItem() and addItem() is both O(1) for both ArrayList and LLList, since the space they use does not depend on the length of the list. Note that we do not need to worry about the case that the ArrayList is full, since its length is predictable. The space efficiency for toString() is O(n) for both ArrayList and LLList, since it has to build up a string whose length is proportional to the number of events. Therefore, as for space, ArrayList and LLList are equally good.
+
+Time efficiency: For removeItem() and addItem(), we had better focus on the average or even the worst case because events are held and canceled fairly randomly, and it is unlikely that we hit the best case all the time. In those cases, these two methods both have O(n) time efficiency for both ArrayList and LLList (because for ArrayList, they have to shift half or more elements, while for LLList, they have to walk down half or more the list). For toString(), the time efficiency is O(n) for both ArrayList and LLList, since we always need to build up the return string by traversing the list. Therefore, as for time, ArrayList and LLList are equally good.
+
+Conclusion: According to our analyses, in general, the performance of ArrayList and LLList are equally good. Thus, my choice would depend on whether I would use this list for other purposes. For example, if in addition to the applition listed in the question, I need to constantly get the information of an event directly, I would choose to use ArrayList since it provides random access.
+
+
+Problem 5.
+
+1. a(n) = O(n)
+   b(n) = O(n^2)
+   c(n) = O(n)
+   d(n) = O(logn)
+   e(n) = O(n)
+
+2. 
+O(n^3)
+The outter loop iterates n times; for each iteration of the outter loop, the midium loop iterates n times; for each iteration of the midium loop, the inner loop iterates j times; for each iteration of the inner loop, the method count() is called once. Therefore the exact number of times that the function count is called is n * (0 + 1 + ... + n-1) = n^2 * (n-1) / 2.
+Therefore, in Big-O notation, the time efficiency of this code fragment is O(n^3).
+
+3. 
+O(nlogn)
+The outter loop iterates (log2(n) + 1) times; for each iteration of the outter loop, the midium loop iterates n times; for each iteration of the midium loop, the inner loop iterates 1000 times; for each iteration of the inner loop, the method count() is called once. Therefore the exact number of times that the function count is called is (log2(n) + 1) * n * 1000.
+Therefore, in Big-O notation, the time efficiency of this code fragment is O(nlogn).
